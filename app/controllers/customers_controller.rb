@@ -9,15 +9,15 @@ class CustomerController < ApplicationController
     end
 
     post '/signup' do
-        if params[:username].emtpy?
+        if params[:username].empty?
             redirect to '/failure'
         end
 
         customer = Customer.new(username: params[:username], password: params[:password])
-        if cusmter.save
+        if customer.save
             redirect '/login'
         else
-            redirect '/fail'
+            redirect '/failure'
         end
     end
 
@@ -29,14 +29,16 @@ class CustomerController < ApplicationController
     get '/login' do
         erb :'customers/login'
     end
-
+ 
     post '/login' do
-        customer = Customer.find_by(username: params[:username])
-        if customer && customer.authenticate(params[:password])
-            session[:customer_id] = cutomer.id
-            redirect '/customers/account'
+        @customer = Customer.find_by(username: params[:username])
+        if @customer 
+            if @customer.authenticate(params[:password])
+                session[:customer_id] = customer.id
+                redirect to '/account'
+            end
         else
-            redirect '/customers/failure'
+            redirect to '/failure'
         end
     end
 
