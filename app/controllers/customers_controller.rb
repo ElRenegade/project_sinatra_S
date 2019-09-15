@@ -1,24 +1,17 @@
 class CustomerController < ApplicationController
 
-    get '/index' do
-        erb :'customers/index'
-    end
-
     get '/signup' do
         erb :'customers/signup'
     end
 
     post '/signup' do
-        if params[:username].empty?
-            redirect to '/failure'
-        end
-
-        customer = Customer.new(username: params[:username], password: params[:password])
-        if customer.save
+        if params[:username] == "" || params[:password] == ""
+            redirect to '/signup'
+          else
+            @customer = Customer.create(:username => params[:username], :password => params[:password])
+            session[:customer_id] = @customer.id
             redirect '/login'
-        else
-            redirect '/failure'
-        end
+          end
     end
 
     get '/account' do
@@ -31,14 +24,12 @@ class CustomerController < ApplicationController
     end
  
     post '/login' do
-        @customer = Customer.find_by(username: params[:username])
-        if @customer 
-            if @customer.authenticate(params[:password])
-                session[:customer_id] = customer.id
-                redirect to '/account'
-            end
-        else
-            redirect to '/failure'
+        customer = Customer.find_by(:username => params[:username])
+        if customer && customer.authenticate(params[:password])
+            session[:customer_id] = customer.id
+            redirect to '/account'
+        # else
+        #     redirect to '/failure'
         end
     end
 
@@ -51,15 +42,7 @@ class CustomerController < ApplicationController
         redirect '/customers'
     end
 
-    helpers do
-        def logged_in?
-            !!session[:customer_id]
-        end
-
-        def current_customer
-            Customer.find(session[:customer_id])
-        end
-    end
+    
 
 
 end

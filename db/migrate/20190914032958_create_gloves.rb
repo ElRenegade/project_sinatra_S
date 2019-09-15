@@ -1,9 +1,9 @@
-class CreateOrders < ActiveRecord::Migration
+class CreateGloves < ActiveRecord::Migration
   def change
-    create_table :orders do |t|
+    create_table :gloves do |t|
       t.string :item
       t.integer :quantity
-      t.float :price
+      t.integer :price
       t.integer :customer_id
     end
   end

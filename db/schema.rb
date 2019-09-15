@@ -15,14 +15,14 @@ ActiveRecord::Schema.define(version: 20190914032958) do
 
   create_table "customers", force: :cascade do |t|
     t.string "name"
-    t.text   "username"
-    t.text   "password"
+    t.string "username"
+    t.string "password_digest"
   end
 
-  create_table "orders", force: :cascade do |t|
+  create_table "gloves", force: :cascade do |t|
     t.string  "item"
     t.integer "quantity"
-    t.float   "price"
+    t.integer "price"
     t.integer "customer_id"
   end
 
